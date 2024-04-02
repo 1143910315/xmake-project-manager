@@ -73,11 +73,11 @@ jobs:
 
         set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-${ninja_suffix}")
         file(DOWNLOAD "${ninja_url}" ./ninja.zip SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ./ninja.zip)
 
         set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-${cmake_suffix}")
         file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ./cmake.zip)
 
         # Add to PATH environment variable
         file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${cmake_dir}" cmake_dir)
@@ -157,11 +157,15 @@ jobs:
         file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt/${qt_dir_prefix}" qt_dir)
         execute_process(COMMAND echo "qt_dir=${qt_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
 
+        # Save the path for other steps
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt/${qt_dir_prefix}" qt6_dir)
+        execute_process(COMMAND echo "QT6_DIR=${qt6_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
+
         message("Downloading Qt to ${qt_dir}")
         function(downloadAndExtract url archive)
           message("Downloading ${url}")
           file(DOWNLOAD "${url}" ./${archive} SHOW_PROGRESS)
-          execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ../${archive} WORKING_DIRECTORY qt)
+          execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ../${archive} WORKING_DIRECTORY qt)
         endfunction()
 
         foreach(package qtbase qtdeclarative)
@@ -220,7 +224,7 @@ jobs:
           file(DOWNLOAD
             "${qtc_base_url}/${qtc_platform}/${package}.7z" ./${package}.7z SHOW_PROGRESS)
           execute_process(COMMAND
-            ${CMAKE_COMMAND} -E tar xvf ../${package}.7z WORKING_DIRECTORY qtcreator)
+            ${CMAKE_COMMAND} -E tar xf ../${package}.7z WORKING_DIRECTORY qtcreator)
         endforeach()
 
     - name: debug
