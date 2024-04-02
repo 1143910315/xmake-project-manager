@@ -391,7 +391,7 @@ jobs:
         if (NOT "${{ runner.os }}" STREQUAL "Windows")
           execute_process(COMMAND chmod +x ${ccache_dir}/ccache)
         endif()
-        
+
 #
 #    - name: Prepare ccache archive name
 #      id: ccache
@@ -492,6 +492,12 @@ jobs:
 #        Qt6ConfigPath=$(find "${search_dir}" -type f -name "Qt6Config.cmake")
 #        echo "Found Qt6Config.cmake at: ${Qt6ConfigPath}"
 #        echo "Qt6_DIR=${Qt6ConfigPath}" >> $GITHUB_ENV
+
+    - name: Find qtcprocess.h
+      run: |
+        search_dir="${GITHUB_WORKSPACE}"
+        qtcprocessPath=$(find "${search_dir}" -type f -name "qtcprocess.h")
+        echo "Found qtcprocess.h at: ${qtcprocessPath}"
   
     - name: Build
       shell: cmake -P {0}
