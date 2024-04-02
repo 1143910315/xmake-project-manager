@@ -88,12 +88,45 @@ jobs:
             COMMAND sudo apt update
           )
           execute_process(
-            COMMAND sudo apt install libgl1-mesa-dev
+            COMMAND
+              sudo apt install chrpath
+                               libgl1-mesa-dev libvulkan-dev libxcb-xinput-dev libxcb-xinerama0-dev libxkbcommon-dev libxkbcommon-x11-dev
+                               libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xkb1 libxcb-randr0 libxcb-icccm4
+                               xvfb
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
             message(FATAL_ERROR "Failed to install dependencies")
           endif()
+        endif()
+        
+        if ("${{ runner.os }}" STREQUAL "Windows")
+          file(MAKE_DIRECTORY build/build/bin)
+          foreach(retry RANGE 10)
+            file(DOWNLOAD "https://download.qt.io/development_releases/prebuilt/llvmpipe/windows/opengl32sw-64.7z" ./opengl32sw-64.7z SHOW_PROGRESS)
+            file(SIZE ./opengl32sw-64.7z fileSize)
+            if (fileSize GREATER 0)
+              break()
+            endif()
+          endforeach()
+          execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ../../../opengl32sw-64.7z WORKING_DIRECTORY build/build/bin)
+        endif()
+
+        if (NOT "x${{ matrix.config.toolchain }}" STREQUAL "x")
+          foreach(retry RANGE 10)
+            file(DOWNLOAD "${{ matrix.config.toolchain }}" ./toolchain.7z SHOW_PROGRESS)
+            file(SIZE ./toolchain.7z fileSize)
+            if (fileSize GREATER 0)
+              break()
+            endif()
+          endforeach()
+          execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./toolchain.7z)
+        endif()
+
+        # For tests update the docker image
+        find_program(docker_executable docker)
+        if (docker_executable)
+          execute_process(COMMAND ${docker_executable} pull alpine:latest COMMAND_ECHO STDOUT)
         endif()
 
     - name: Download Qt
@@ -196,7 +229,7 @@ jobs:
           execute_process(COMMAND
             ${CMAKE_COMMAND} -E tar xvf ../${package}.7z WORKING_DIRECTORY qtcreator)
         endforeach()
-        
+
 #Found Qt6Config.cmake at: /home/runner/work/xmake-project-manager/xmake-project-manager/qt6/6.6.0/gcc_64/lib/cmake/Qt6/Qt6Config.cmake
 #    - name: Find Qt6Config.cmake and set as environment variable
 #      run: |
