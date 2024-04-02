@@ -157,12 +157,7 @@ jobs:
         file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt/${qt_dir_prefix}" qt_dir)
         execute_process(COMMAND echo "qt_dir=${qt_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
 
-        # Save the path for other steps
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/6.7.0/gcc_64/lib/cmake/Qt6" qt6_dir)
-        execute_process(COMMAND echo "Qt6_DIR=${qt6_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
-
         message("Downloading Qt to ${qt_dir}")
-        message("Qt6_DIR is ${qt6_dir}")
 
         function(downloadAndExtract url archive)
           message("Downloading ${url}")
@@ -239,6 +234,16 @@ jobs:
         set(ENV{CC} ${{ matrix.config.cc }})
         set(ENV{CXX} ${{ matrix.config.cxx }})
         set(ENV{MACOSX_DEPLOYMENT_TARGET} "10.13")
+
+        if ("${{ runner.os }}" STREQUAL "Windows")
+            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/msvc2019_64/lib/cmake/Qt6")
+        elseif ("${{ runner.os }}" STREQUAL "Linux")
+            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/gcc_64/lib/cmake/Qt6")
+        elseif ("${{ runner.os }}" STREQUAL "macOS")
+            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/clang_64/lib/cmake/Qt6")
+        endif()
+
+        message("Qt6_DIR is ${Qt6_DIR}")
 
         if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
           execute_process(
