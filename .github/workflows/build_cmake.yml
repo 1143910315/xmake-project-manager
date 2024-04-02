@@ -377,6 +377,7 @@ jobs:
         endif()
 
         set(ccache_url "https://github.com/ccache/ccache/releases/download/v$ENV{CCACHE_VERSION}/${ccache_archive}")
+        message("Downloading ccache from ${ccache_url}")
         file(DOWNLOAD "${ccache_url}" ./${ccache_archive} SHOW_PROGRESS)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./${ccache_archive})
 
@@ -392,16 +393,15 @@ jobs:
           execute_process(COMMAND chmod +x ${ccache_dir}/ccache)
         endif()
 
-#
-#    - name: Prepare ccache archive name
-#      id: ccache
-#      shell: cmake -P {0}
-#      run: |
-#        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" github_workspace)
-#        include(${github_workspace}/cmake/QtCreatorIDEBranding.cmake)
-#        string(REPLACE "." ";" IDE_VERSION_LIST ${IDE_VERSION_DISPLAY})
-#        list(GET IDE_VERSION_LIST 0 IDE_VERSION_MAJOR)
-#        file(APPEND "$ENV{GITHUB_OUTPUT}" "archive_name=ccache-${{ matrix.config.os }}-${{ matrix.config.cc }}-qtc${IDE_VERSION_MAJOR}")
+    - name: Prepare ccache archive name
+      id: ccache
+      shell: cmake -P {0}
+      run: |
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" github_workspace)
+        include(${github_workspace}/cmake/QtCreatorIDEBranding.cmake)
+        string(REPLACE "." ";" IDE_VERSION_LIST ${IDE_VERSION_DISPLAY})
+        list(GET IDE_VERSION_LIST 0 IDE_VERSION_MAJOR)
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "archive_name=ccache-${{ matrix.config.os }}-${{ matrix.config.cc }}-qtc${IDE_VERSION_MAJOR}")
 
     - name: Download ccache archive
       shell: cmake -P {0}
