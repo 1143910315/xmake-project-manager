@@ -228,22 +228,19 @@ jobs:
       run: |
          echo "${{steps.qt_creator.outputs.qtc_dir}}"
 
+    - name: Find Qt6Config.cmake and set as environment variable
+      run: |
+        search_dir="${GITHUB_WORKSPACE}"
+        Qt6ConfigPath=$(find "${search_dir}" -type f -name "Qt6Config.cmake")
+        echo "Found Qt6Config.cmake at: ${Qt6ConfigPath}"
+        echo "Qt6_DIR=${Qt6ConfigPath}" >> $GITHUB_ENV
+
     - name: Configure & Build
       shell: cmake -P {0}
       run: |
         set(ENV{CC} ${{ matrix.config.cc }})
         set(ENV{CXX} ${{ matrix.config.cxx }})
         set(ENV{MACOSX_DEPLOYMENT_TARGET} "10.13")
-
-        if ("${{ runner.os }}" STREQUAL "Windows")
-            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/msvc2019_64/lib/cmake/Qt6")
-        elseif ("${{ runner.os }}" STREQUAL "Linux")
-            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/gcc_64/lib/cmake/Qt6")
-        elseif ("${{ runner.os }}" STREQUAL "macOS")
-            set(Qt6_DIR "$ENV{GITHUB_WORKSPACE}/6.7.0/clang_64/lib/cmake/Qt6")
-        endif()
-
-        message("Qt6_DIR is ${Qt6_DIR}")
 
         if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
           execute_process(
