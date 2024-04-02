@@ -158,10 +158,12 @@ jobs:
         execute_process(COMMAND echo "qt_dir=${qt_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
 
         # Save the path for other steps
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt/${qt_dir_prefix}" qt6_dir)
-        execute_process(COMMAND echo "QT6_DIR=${qt6_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/6.7.0/gcc_64/lib/cmake/Qt6" qt6_dir)
+        execute_process(COMMAND echo "Qt6_DIR=${qt6_dir}" OUTPUT_FILE $ENV{GITHUB_OUTPUT})
 
         message("Downloading Qt to ${qt_dir}")
+        message("Qt6_DIR is ${qt6_dir}")
+
         function(downloadAndExtract url archive)
           message("Downloading ${url}")
           file(DOWNLOAD "${url}" ./${archive} SHOW_PROGRESS)
