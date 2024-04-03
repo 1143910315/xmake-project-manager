@@ -124,12 +124,12 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeTools::xmakeWrapper() -> std::shared_ptr<XMakeWrapper> {
-        return autoDetected<XMakeWrapper>(instance()->m_tools);
+        return autoDetected<XMakeWrapper>(instance().m_tools);
     }
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeTools::xmakeWrapper(Utils::Id id) -> std::shared_ptr<XMakeWrapper> {
-        return tool<XMakeWrapper>(id, instance()->m_tools);
+        return tool<XMakeWrapper>(id, instance().m_tools);
     }
 } // namespace XMakeProjectManager::Internal
