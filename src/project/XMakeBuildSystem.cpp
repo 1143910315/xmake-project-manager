@@ -19,7 +19,6 @@
 #include <projectexplorer/taskhub.h>
 
 #include <qtsupport/qtcppkitinfo.h>
-#include <qtsupport/qtkitinformation.h>
 
 #include <qmljs/qmljsdialect.h>
 #include <qmljs/qmljsmodelmanagerinterface.h>
