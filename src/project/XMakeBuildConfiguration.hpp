@@ -57,14 +57,14 @@ namespace XMakeProjectManager::Internal {
         void setParameters(const QString &params);
         void addParameters(const QString &params);
 
+        void fromMap(const Utils::Store &map) override;
+        void toMap(Utils::Store &map) const override;
+
       Q_SIGNALS:
         void parametersChanged();
 
       private:
-        QVariantMap toMap() const override;
-
-        bool fromMap(const QVariantMap &map) override;
-
+      
         XMakeBuildType m_build_type;
 
         ProjectExplorer::NamedWidget *createConfigWidget() override;

@@ -26,8 +26,8 @@ namespace XMakeProjectManager::Internal {
 
         const QString &targetName() const;
 
-        QVariantMap toMap() const override;
-        bool fromMap(const QVariantMap &map) override;
+        void fromMap(const Utils::Store &map) override;
+        void toMap(Utils::Store &map) const override;
 
       Q_SIGNALS:
         void targetListChanged();
@@ -35,7 +35,6 @@ namespace XMakeProjectManager::Internal {
 
       private:
         void update(bool parsing_successful);
-        void doRun() override;
         void setupOutputFormatter(Utils::OutputFormatter *formatter) override;
         QString defaultBuildTarget() const;
 

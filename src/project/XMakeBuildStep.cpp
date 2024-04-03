@@ -174,24 +174,22 @@ namespace XMakeProjectManager::Internal {
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeBuildStep::toMap() const -> QVariantMap {
-        auto map = AbstractProcessStep::toMap();
-
-        map[QString::fromLatin1(Constants::BuildStep::TARGETS_KEY)]        = m_target_name;
-        map[QString::fromLatin1(Constants::BuildStep::TOOL_ARGUMENTS_KEY)] = m_command_args;
-
-        return map;
-    }
-
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeBuildStep::fromMap(const QVariantMap &map) -> bool {
+    auto XMakeBuildStep::fromMap(const Utils::Store &map) -> void {
         m_target_name =
             map.value(QString::fromLatin1(Constants::BuildStep::TARGETS_KEY)).toString();
         m_command_args =
             map.value(QString::fromLatin1(Constants::BuildStep::TOOL_ARGUMENTS_KEY)).toString();
 
-        return AbstractProcessStep::fromMap(map);
+        AbstractProcessStep::fromMap(map);
+    }
+
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    auto XMakeBuildStep::toMap(Utils::Store &map) const -> void {
+        AbstractProcessStep::toMap(map);
+
+        map[QString::fromLatin1(Constants::BuildStep::TARGETS_KEY)]        = m_target_name;
+        map[QString::fromLatin1(Constants::BuildStep::TOOL_ARGUMENTS_KEY)] = m_command_args;
     }
 
     ////////////////////////////////////////////////////
@@ -202,12 +200,6 @@ namespace XMakeProjectManager::Internal {
 
             Q_EMIT targetListChanged();
         }
-    }
-
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeBuildStep::doRun() -> void {
-        AbstractProcessStep::doRun();
     }
 
     ////////////////////////////////////////////////////

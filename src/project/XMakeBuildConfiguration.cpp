@@ -110,19 +110,17 @@ namespace XMakeProjectManager::Internal {
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeBuildConfiguration::toMap() const -> QVariantMap {
-        auto data = ProjectExplorer::BuildConfiguration::toMap();
-        data[QString::fromLatin1(Constants::BuildConfiguration::BUILD_TYPE_KEY)] =
+    auto XMakeBuildConfiguration::toMap(const Utils::Store &map) const -> void {
+        ProjectExplorer::BuildConfiguration::toMap(map);
+        map[QString::fromLatin1(Constants::BuildConfiguration::BUILD_TYPE_KEY)] =
             xmakeBuildTypeName(m_build_type);
-        data[QString::fromLatin1(Constants::BuildConfiguration::PARAMETERS_KEY)] = m_parameters;
-
-        return data;
+        map[QString::fromLatin1(Constants::BuildConfiguration::PARAMETERS_KEY)] = m_parameters;
     }
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeBuildConfiguration::fromMap(const QVariantMap &map) -> bool {
-        const auto result = ProjectExplorer::BuildConfiguration::fromMap(map);
+    auto XMakeBuildConfiguration::fromMap(const Utils::Store &map) -> void {
+        ProjectExplorer::BuildConfiguration::fromMap(map);
 
         m_build_system = std::make_unique<XMakeBuildSystem>(this);
         m_build_type   = xmakeBuildType(
@@ -130,8 +128,6 @@ namespace XMakeProjectManager::Internal {
                 .toString());
         m_parameters = map.value(QString::fromLatin1(Constants::BuildConfiguration::PARAMETERS_KEY))
                            .toString();
-
-        return result;
     }
 
     ////////////////////////////////////////////////////
