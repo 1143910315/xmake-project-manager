@@ -151,7 +151,7 @@ namespace XMakeProjectManager::Internal {
     auto XMakeProcess::setupProcess(const Command &command,
                                     const Utils::Environment &env,
                                     bool capture_stdio) -> void {
-        m_process = std::make_unique<Utils::QtcProcess>();
+        m_process = std::make_unique<Utils::Process>();
         m_process->setWorkingDirectory(command.workDir());
         m_process->setEnvironment(env);
 
@@ -167,7 +167,7 @@ namespace XMakeProjectManager::Internal {
             ProjectExplorer::BuildSystem::appendBuildSystemOutput(stripTrailingNewline(s));
         });
 
-        connect(m_process.get(), &Utils::QtcProcess::done, this, [this] {
+        connect(m_process.get(), &Utils::Process::done, this, [this] {
             handleProcessDone(m_process->resultData());
         });
 

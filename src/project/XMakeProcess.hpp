@@ -21,7 +21,7 @@ class QFutureWatcher;
 QT_END_NAMESPACE
 
 namespace Utils {
-    class QtcProcess;
+    class Process;
     class Environment;
 } // namespace Utils
 
@@ -54,7 +54,7 @@ namespace XMakeProjectManager::Internal {
 
         bool sanityCheck(const Command &command) const;
 
-        std::unique_ptr<Utils::QtcProcess> m_process;
+        std::unique_ptr<Utils::Process> m_process;
         QFutureInterface<void> m_future_interface;
         std::unique_ptr<QFutureWatcher<void>> m_future_watcher;
 
