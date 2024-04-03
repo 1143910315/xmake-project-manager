@@ -102,7 +102,7 @@ jobs:
             COMMAND sudo apt update
           )
           execute_process(
-            COMMAND sudo apt install libgl1-mesa-dev gcc-10 g++-10
+            COMMAND sudo apt install libgl1-mesa-dev libvulkan-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb-xkb1 xvfb gcc-10 g++-10
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
