@@ -44,8 +44,8 @@ namespace XMakeProjectManager::Internal {
     auto toAbsolutePath(const Utils::FilePath &ref_path, const QStringList &path_list)
         -> QStringList {
         QStringList allAbs;
-        std::transform(std::cbegin(pathList),
-                    std::cend(pathList),
+        std::transform(std::cbegin(path_list),
+                    std::cend(path_list),
                     std::back_inserter(allAbs),
                     [refPath](const QString &path) {
                             return refPath.resolvePath(path).toString();
