@@ -11,6 +11,7 @@
 #include <coreplugin/icontext.h>
 
 #include <projectexplorer/deploymentdata.h>
+#include <projectexplorer/kitaspects.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/projectimporter.h>
