@@ -22,52 +22,47 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     XMakeRunConfiguration::XMakeRunConfiguration(ProjectExplorer::Target *target, Utils::Id id)
         : ProjectExplorer::RunConfiguration { target, id } {
-        auto env_aspect = addAspect<ProjectExplorer::LocalEnvironmentAspect>(target);
+        environment.setSupportForBuildEnvironment(target);
 
-        addAspect<ProjectExplorer::ExecutableAspect>(target,
-                                                     ProjectExplorer::ExecutableAspect::RunDevice);
-        addAspect<ProjectExplorer::ArgumentsAspect>(macroExpander());
-        addAspect<ProjectExplorer::WorkingDirectoryAspect>(macroExpander(), env_aspect);
-        addAspect<ProjectExplorer::TerminalAspect>();
+        executable.setDeviceSelector(target, ExecutableAspect::RunDevice);
 
-        auto lib_aspect = addAspect<ProjectExplorer::UseLibraryPathsAspect>();
-        connect(lib_aspect,
-                &ProjectExplorer::UseLibraryPathsAspect::changed,
-                env_aspect,
-                &ProjectExplorer::EnvironmentAspect::environmentChanged);
+        arguments.setMacroExpander(macroExpander());
 
-        if (Utils::HostOsInfo::isMacHost()) {
-            auto dyld_aspect = addAspect<ProjectExplorer::UseDyldSuffixAspect>();
-            connect(dyld_aspect,
-                    &ProjectExplorer::UseLibraryPathsAspect::changed,
-                    env_aspect,
-                    &ProjectExplorer::EnvironmentAspect::environmentChanged);
+        workingDir.setMacroExpander(macroExpander());
+        workingDir.setEnvironment(&environment);
 
-            env_aspect->addModifier([dyld_aspect](Utils::Environment &env) {
-                if (dyld_aspect->value())
-                    env.set(QLatin1String { "DYLD_IMAGE_SUFFIX" }, QLatin1String { "_debug" });
+        connect(&useLibraryPaths, &BaseAspect::changed,
+                &environment, &EnvironmentAspect::environmentChanged);
+
+        if (HostOsInfo::isMacHost()) {
+            connect(&useDyldSuffix, &BaseAspect::changed,
+                    &environment, &EnvironmentAspect::environmentChanged);
+            environment.addModifier([this](Environment &env) {
+                if (useDyldSuffix())
+                    env.set(QLatin1String("DYLD_IMAGE_SUFFIX"), QLatin1String("_debug"));
             });
+        } else {
+            useDyldSuffix.setVisible(false);
         }
 
-        env_aspect->addModifier([this, lib_aspect](Utils::Environment &env) {
-            ProjectExplorer::BuildTargetInfo b_ti = buildTargetInfo();
-            if (b_ti.runEnvModifier) b_ti.runEnvModifier(env, lib_aspect->value());
+        environment.addModifier([this](Environment &env) {
+            BuildTargetInfo bti = buildTargetInfo();
+            if (bti.runEnvModifier)
+                bti.runEnvModifier(env, useLibraryPaths());
         });
 
-        auto *kit     = target->kit();
-        auto kit_info = QtSupport::CppKitInfo { kit };
-        if (kit_info.qtVersion && !kit_info.qtVersion->prefix().isEmpty())
-            env_aspect->addModifier(
-                [kit_info = QtSupport::CppKitInfo { kit }](Utils::Environment &env) {
-                    env.appendOrSetPath(kit_info.qtVersion->binPath());
-                });
+        setUpdater([this] {
+            if (!activeBuildSystem())
+                return;
 
-        setUpdater([this] { updateTargetInformation(); });
+            BuildTargetInfo bti = buildTargetInfo();
+            terminal.setUseTerminalHint(bti.usesTerminal);
+            executable.setExecutable(bti.targetFilePath);
+            workingDir.setDefaultWorkingDirectory(bti.workingDirectory);
+            emit environment.environmentChanged();
+        });
 
-        connect(target,
-                &ProjectExplorer::Target::buildSystemUpdated,
-                this,
-                &ProjectExplorer::RunConfiguration::update);
+        connect(target, &Target::buildSystemUpdated, this, &RunConfiguration::update);
     }
 
     ////////////////////////////////////////////////////

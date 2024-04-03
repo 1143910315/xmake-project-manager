@@ -24,6 +24,7 @@
 #include <utils/filepath.h>
 #include <utils/mimeutils.h>
 
+#include <qtsupport/baseqtversion.h>
 #include <qtsupport/qtcppkitinfo.h>
 
 #include <QJsonDocument>
@@ -42,18 +43,14 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     auto toAbsolutePath(const Utils::FilePath &ref_path, const QStringList &path_list)
         -> QStringList {
-        auto output = QStringList {};
-        output.reserve(std::size(path_list));
-
-        std::transform(std::cbegin(path_list),
-                       std::cend(path_list),
-                       std::back_inserter(output),
-                       [ref_path](const QString &path) {
-                           if (Utils::FileUtils::isAbsolutePath(path)) return path;
-                           return ref_path.pathAppended(path).toString();
-                       });
-
-        return output;
+        QStringList allAbs;
+        std::transform(std::cbegin(pathList),
+                    std::cend(pathList),
+                    std::back_inserter(allAbs),
+                    [refPath](const QString &path) {
+                            return refPath.resolvePath(path).toString();
+                    });
+        return allAbs;
     }
 
     ////////////////////////////////////////////////////
