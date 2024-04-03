@@ -64,7 +64,7 @@ namespace XMakeProjectManager::Internal {
 
         XMakeActionsManager m_actions_manager;
 
-        ProjectExplorer::SimpleTargetRunnerFactory m_xmake_run_worker_factory{{m_runConfigurationFactory.runConfigurationId()}};
+        ProjectExplorer::SimpleTargetRunnerFactory m_xmake_run_worker_factory{{m_run_configuration_factory.runConfigurationId()}};
     };
 
     ////////////////////////////////////////////////////
