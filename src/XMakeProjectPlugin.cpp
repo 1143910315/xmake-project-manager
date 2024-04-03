@@ -31,12 +31,7 @@ namespace XMakeProjectManager::Internal {
         Q_OBJECT
 
       public:
-        XMakeProjectPluginPrivate()
-            : m_xmake_run_worker_factory {
-                  ProjectExplorer::RunWorkerFactory::make<ProjectExplorer::SimpleTargetRunner>(),
-                  { ProjectExplorer::Constants::NORMAL_RUN_MODE },
-                  { m_run_configuration_factory.runConfigurationId() }
-              } {
+        XMakeProjectPluginPrivate() {
             XMakeTools::setTools(m_tools_settings.loadXMakeTools(Core::ICore::dialogParent()));
             connect(Core::ICore::instance(),
                     &Core::ICore::saveSettingsRequested,
@@ -69,7 +64,7 @@ namespace XMakeProjectManager::Internal {
 
         XMakeActionsManager m_actions_manager;
 
-        ProjectExplorer::RunWorkerFactory m_xmake_run_worker_factory;
+        SimpleTargetRunnerFactory m_xmake_run_worker_factory{{m_runConfigurationFactory.runConfigurationId()}};
     };
 
     ////////////////////////////////////////////////////
