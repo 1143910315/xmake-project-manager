@@ -4,14 +4,17 @@
 
 #pragma once
 
-#include <projectexplorer/desktoprunconfiguration.h>
-#include <projectexplorer/runconfiguration.h>
-#include <projectexplorer/target.h>
 #include <projectexplorer/buildsystem.h>
+#include <projectexplorer/desktoprunconfiguration.h>
 #include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/runconfiguration.h>
 #include <projectexplorer/runconfigurationaspects.h>
+#include <projectexplorer/target.h>
 
 #include <utils/hostosinfo.h>
+
+using namespace ProjectExplorer;
+using namespace Utils;
 
 namespace XMakeProjectManager::Internal {
     class XMakeRunConfiguration final: public ProjectExplorer::RunConfiguration {
@@ -20,14 +23,14 @@ namespace XMakeProjectManager::Internal {
 
       private:
         void updateTargetInformation();
-        
-        EnvironmentAspect environment{this};
-        ExecutableAspect executable{this};
-        ArgumentsAspect arguments{this};
-        WorkingDirectoryAspect workingDir{this};
-        TerminalAspect terminal{this};
-        UseLibraryPathsAspect useLibraryPaths{this};
-        UseDyldSuffixAspect useDyldSuffix{this};
+
+        EnvironmentAspect environment { this };
+        ExecutableAspect executable { this };
+        ArgumentsAspect arguments { this };
+        WorkingDirectoryAspect workingDir { this };
+        TerminalAspect terminal { this };
+        UseLibraryPathsAspect useLibraryPaths { this };
+        UseDyldSuffixAspect useDyldSuffix { this };
     };
 
     class XMakeRunConfigurationFactory final: public ProjectExplorer::RunConfigurationFactory {
