@@ -35,7 +35,7 @@ namespace XMakeProjectManager::Internal {
         setCategory(Constants::SettingsPage::CATEGORY);
         setCategoryIconPath(
             Utils::FilePath::fromString(QLatin1String { Constants::Icons::XMAKE_BW }));
-        setWidgetCreator([] { return Settings::instance(); });
+        setSettingsProvider([] { return Settings::instance(); });
 
         //setLayouter([](auto *widget) {
         //    auto &settings = *Settings::instance();
