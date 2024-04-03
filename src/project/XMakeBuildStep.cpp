@@ -176,9 +176,9 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     auto XMakeBuildStep::fromMap(const Utils::Store &map) -> void {
         m_target_name =
-            map.value(QString::fromLatin1(Constants::BuildStep::TARGETS_KEY)).toString();
+            map.value(Constants::BuildStep::TARGETS_KEY).toString();
         m_command_args =
-            map.value(QString::fromLatin1(Constants::BuildStep::TOOL_ARGUMENTS_KEY)).toString();
+            map.value(Constants::BuildStep::TOOL_ARGUMENTS_KEY).toString();
 
         AbstractProcessStep::fromMap(map);
     }
@@ -188,8 +188,8 @@ namespace XMakeProjectManager::Internal {
     auto XMakeBuildStep::toMap(Utils::Store &map) const -> void {
         AbstractProcessStep::toMap(map);
 
-        map[QString::fromLatin1(Constants::BuildStep::TARGETS_KEY)]        = m_target_name;
-        map[QString::fromLatin1(Constants::BuildStep::TOOL_ARGUMENTS_KEY)] = m_command_args;
+        map[Constants::BuildStep::TARGETS_KEY]        = m_target_name;
+        map[Constants::BuildStep::TOOL_ARGUMENTS_KEY] = m_command_args;
     }
 
     ////////////////////////////////////////////////////
