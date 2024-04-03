@@ -70,7 +70,7 @@ namespace XMakeProjectManager::Internal {
         for (auto tool_index = 0; tool_index < entry_count; ++tool_index) {
             auto name = entryName(tool_index);
 
-            if (data.contains(name)) {
+            if (data.contains(name.uft8())) {
                 const auto map = data[name].toMap();
                 const auto type =
                     map.value(QLatin1String { Constants::ToolsSettings::TOOL_TYPE_KEY },
