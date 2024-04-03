@@ -22,7 +22,6 @@ namespace XMakeProjectManager::Internal {
         XMakeRunConfiguration(ProjectExplorer::Target *target, Utils::Id id);
 
       private:
-        void updateTargetInformation();
 
         EnvironmentAspect environment { this };
         ExecutableAspect executable { this };

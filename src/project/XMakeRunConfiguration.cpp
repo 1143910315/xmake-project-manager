@@ -67,21 +67,6 @@ namespace XMakeProjectManager::Internal {
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeRunConfiguration::updateTargetInformation() -> void {
-        if (!activeBuildSystem()) return;
-
-        auto b_ti            = buildTargetInfo();
-        auto terminal_aspect = aspect<ProjectExplorer::TerminalAspect>();
-        terminal_aspect->setUseTerminalHint(b_ti.usesTerminal);
-
-        aspect<ProjectExplorer::ExecutableAspect>()->setExecutable(b_ti.targetFilePath);
-        aspect<ProjectExplorer::WorkingDirectoryAspect>()->setDefaultWorkingDirectory(
-            b_ti.workingDirectory);
-        Q_EMIT aspect<ProjectExplorer::LocalEnvironmentAspect>()->environmentChanged();
-    }
-
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
     XMakeRunConfigurationFactory::XMakeRunConfigurationFactory() {
         registerRunConfiguration<XMakeRunConfiguration>(
             "XMakeProjectManager.XMakeRunConfiguration");
