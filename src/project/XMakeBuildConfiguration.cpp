@@ -105,7 +105,7 @@ namespace XMakeProjectManager::Internal {
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeBuildConfiguration::toMap(const Utils::Store &map) const -> void {
+    auto XMakeBuildConfiguration::toMap(Utils::Store &map) const -> void {
         ProjectExplorer::BuildConfiguration::toMap(map);
         map[Constants::BuildConfiguration::BUILD_TYPE_KEY] =
             xmakeBuildTypeName(m_build_type);
