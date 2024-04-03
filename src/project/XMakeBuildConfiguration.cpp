@@ -6,6 +6,7 @@
 
 #include "buildoptions/XMakeBuildSettingsWidget.hpp"
 #include "utils/environment.h"
+#include "utils/hostosinfo.h"
 
 #include <XMakeProjectConstant.hpp>
 
