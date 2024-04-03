@@ -37,11 +37,11 @@ namespace XMakeProjectManager::Internal {
             Utils::FilePath::fromString(QLatin1String { Constants::Icons::XMAKE_BW }));
         setWidgetCreator([] { return Settings::instance(); });
 
-        setLayouter([](auto *widget) {
-            auto &settings = *Settings::instance();
-
-            Utils::Layouting::Column { Utils::Layouting::st }.attachTo(widget);
-        });
+        //setLayouter([](auto *widget) {
+        //    auto &settings = *Settings::instance();
+        //
+        //    Utils::Layouting::Column { Utils::Layouting::st }.attachTo(widget);
+        //});
     }
 
     ////////////////////////////////////////////////////
