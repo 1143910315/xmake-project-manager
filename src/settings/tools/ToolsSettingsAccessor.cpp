@@ -71,7 +71,7 @@ namespace XMakeProjectManager::Internal {
             auto name = entryName(tool_index);
 
             if (data.contains(name.uft8())) {
-                const auto map = data[name].toMap();
+                const auto map = data[name.uft8()].toMap();
                 const auto type =
                     map.value(Constants::ToolsSettings::TOOL_TYPE_KEY,
                               Constants::ToolsSettings::TOOL_TYPE_XMAKE); // TODO xrepo
