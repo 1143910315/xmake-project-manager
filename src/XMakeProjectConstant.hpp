@@ -46,8 +46,8 @@ namespace XMakeProjectManager::Constants {
     } // namespace BuildConfiguration
 
     namespace BuildStep {
-        static constexpr auto TARGETS_KEY = "XMakeProjectManager.BuildStep.BuildTargets";
-        static constexpr auto TOOL_ARGUMENTS_KEY =
+        static constexpr const char * TARGETS_KEY = "XMakeProjectManager.BuildStep.BuildTargets";
+        static constexpr const char * TOOL_ARGUMENTS_KEY =
             "XMakeProjectManager.BuildStep.AdditionalArguments";
     } // namespace BuildStep
 
