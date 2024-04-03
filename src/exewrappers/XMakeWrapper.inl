@@ -65,14 +65,14 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     inline auto runXMake(const Command &command, QIODevice *output) -> bool {
-        auto process = Utils::Process {};
+        Utils::Process process;
         process.setWorkingDirectory(command.workDir());
         process.setCommand(command.cmdLine());
         process.start();
 
         if (!process.waitForFinished()) return false;
 
-        if (output) output->write(process.readAllStandardOutput());
+        if (output) output->write(process.readAllRawStandardOutput());
 
         return process.exitCode() == 0;
     }

@@ -15,23 +15,23 @@
 namespace XMakeProjectManager::Internal {
 
     template<typename T>
-    inline bool is(const MesonTools::Tool_t &tool) {
+    inline bool is(const XMakeTools::Tool_t &tool) {
         return bool(std::dynamic_pointer_cast<T>(tool));
     }
 
     template<typename T>
-    std::shared_ptr<T> tool(const Utils::Id &id, const std::vector<MesonTools::Tool_t> &tools) {
+    std::shared_ptr<T> tool(const Utils::Id &id, const std::vector<XMakeTools::Tool_t> &tools) {
         static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
         const auto tool =
             std::find_if(std::cbegin(tools),
                          std::cend(tools),
-                         [&id](const MesonTools::Tool_t &tool) { return tool->id() == id; });
+                         [&id](const XMakeTools::Tool_t &tool) { return tool->id() == id; });
         if (tool != std::cend(tools) && is<T>(*tool)) return std::dynamic_pointer_cast<T>(*tool);
         return nullptr;
     }
 
     template<typename T>
-    std::shared_ptr<T> autoDetected(const std::vector<MesonTools::Tool_t> &tools) {
+    std::shared_ptr<T> autoDetected(const std::vector<XMakeTools::Tool_t> &tools) {
         static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
         for (const auto &tool : tools) {
             if (tool->autoDetected() && is<T>(tool)) { return std::dynamic_pointer_cast<T>(tool); }
@@ -124,12 +124,12 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeTools::xmakeWrapper() -> std::shared_ptr<XMakeWrapper> {
-        return autoDetected<MesonWrapper>(instance()->m_tools);
+        return autoDetected<XMakeWrapper>(instance()->m_tools);
     }
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeTools::xmakeWrapper(Utils::Id id) -> std::shared_ptr<XMakeWrapper> {
-        return tool<MesonWrapper>(id, instance()->m_tools);
+        return tool<XMakeWrapper>(id, instance()->m_tools);
     }
 } // namespace XMakeProjectManager::Internal

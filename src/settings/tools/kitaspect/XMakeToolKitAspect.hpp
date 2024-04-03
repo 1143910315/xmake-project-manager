@@ -31,5 +31,3 @@ namespace XMakeProjectManager::Internal {
         }
     };
 } // namespace XMakeProjectManager::Internal
-
-#include "XMakeToolKitAspect.inl"
