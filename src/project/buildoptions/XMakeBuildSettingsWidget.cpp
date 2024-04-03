@@ -147,7 +147,7 @@ namespace XMakeProjectManager::Internal {
                               Row { m_options_tree_view },
                               m_configure_button,
                               m_wipe_button }
-                         .setSpacing(0) }
+                              }
                 .attachTo(details);
         }
 
