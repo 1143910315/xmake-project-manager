@@ -38,11 +38,6 @@ namespace XMakeProjectManager::Internal {
                                               info.typeName);
 
             auto *kit     = target->kit();
-            auto kit_info = QtSupport::CppKitInfo { kit };
-            if (kit_info.qtVersion && !kit_info.qtVersion->prefix().isEmpty()) {
-                m_parameters +=
-                    QString { " --qt=\"%1\"" }.arg(kit_info.qtVersion->prefix().nativePath());
-            }
 
             if (info.buildDirectory.isEmpty())
                 setBuildDirectory(shadowBuildDirectory(target->project()->projectFilePath(),
