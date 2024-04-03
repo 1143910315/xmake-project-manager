@@ -23,7 +23,6 @@
 #include <utils/fileinprojectfinder.h>
 #include <utils/filepath.h>
 #include <utils/mimeutils.h>
-#include <utils/runextensions.h>
 
 #include <qtsupport/qtcppkitinfo.h>
 #include <qtsupport/qtkitinformation.h>
