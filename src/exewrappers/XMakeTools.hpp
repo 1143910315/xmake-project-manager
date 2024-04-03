@@ -19,7 +19,7 @@ namespace XMakeProjectManager::Internal {
         Q_OBJECT
 
       public:
-        using XMakeWrapperPtr = std::unique_ptr<XMakeWrapper>;
+        using XMakeWrapperPtr = std::shared_ptr<XMakeWrapper>;
 
         ~XMakeTools() override;
 
@@ -39,8 +39,8 @@ namespace XMakeProjectManager::Internal {
 
         static const std::vector<XMakeWrapperPtr> &tools() noexcept;
 
-        static std::shared_ptr<XMakeWrapper> xmakeWrapper();
-        static std::shared_ptr<XMakeWrapper> xmakeWrapper(Utils::Id id);
+        static XMakeWrapperPtr xmakeWrapper();
+        static XMakeWrapperPtr xmakeWrapper(Utils::Id id);
 
         static XMakeTools &instance();
       Q_SIGNALS:

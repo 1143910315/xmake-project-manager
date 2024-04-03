@@ -15,23 +15,23 @@
 namespace XMakeProjectManager::Internal {
 
     template<typename T>
-    inline bool is(const XMakeTools::Tool_t &tool) {
+    inline bool is(const XMakeTools::XMakeWrapperPtr &tool) {
         return bool(std::dynamic_pointer_cast<T>(tool));
     }
 
     template<typename T>
-    std::shared_ptr<T> tool(const Utils::Id &id, const std::vector<XMakeTools::Tool_t> &tools) {
+    std::shared_ptr<T> tool(const Utils::Id &id, const std::vector<XMakeTools::XMakeWrapperPtr> &tools) {
         static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
         const auto tool =
             std::find_if(std::cbegin(tools),
                          std::cend(tools),
-                         [&id](const XMakeTools::Tool_t &tool) { return tool->id() == id; });
+                         [&id](const XMakeTools::XMakeWrapperPtr &tool) { return tool->id() == id; });
         if (tool != std::cend(tools) && is<T>(*tool)) return std::dynamic_pointer_cast<T>(*tool);
         return nullptr;
     }
 
     template<typename T>
-    std::shared_ptr<T> autoDetected(const std::vector<XMakeTools::Tool_t> &tools) {
+    std::shared_ptr<T> autoDetected(const std::vector<XMakeTools::XMakeWrapperPtr> &tools) {
         static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
         for (const auto &tool : tools) {
             if (tool->autoDetected() && is<T>(tool)) { return std::dynamic_pointer_cast<T>(tool); }
@@ -82,7 +82,7 @@ namespace XMakeProjectManager::Internal {
 
         auto path = XMakeWrapper::findTool();
         if (path)
-            self.m_tools.emplace_back(std::make_unique<XMakeWrapper>(QStringLiteral("System XMake"),
+            self.m_tools.emplace_back(std::make_shared<XMakeWrapper>(QStringLiteral("System XMake"),
                                                                      std::move(path.value()),
                                                                      true));
     }
