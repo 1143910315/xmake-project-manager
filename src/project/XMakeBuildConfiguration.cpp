@@ -100,7 +100,7 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeBuildConfiguration::xmakeConfigArgs() -> QStringList {
-        return Utils::ProcessArgs::splitArgs(m_parameters, HostOsInfo::hostOs());
+        return Utils::ProcessArgs::splitArgs(m_parameters, Utils::HostOsInfo::hostOs());
     }
 
     ////////////////////////////////////////////////////
