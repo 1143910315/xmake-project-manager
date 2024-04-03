@@ -26,7 +26,7 @@ namespace XMakeProjectManager::Internal {
 
         static inline bool isValid(const ProjectExplorer::Kit *kit)
         {
-            auto tool = xmakeToolId(kit);
+            auto tool = xmakeTool(kit);
             return (tool && tool->isValid());
         }
     };
