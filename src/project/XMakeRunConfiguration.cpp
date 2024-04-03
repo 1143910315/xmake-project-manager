@@ -11,7 +11,6 @@
 #include <projectexplorer/buildsystem.h>
 #include <projectexplorer/desktoprunconfiguration.h>
 #include <projectexplorer/environmentaspect.h>
-#include <projectexplorer/localenvironmentaspect.h>
 #include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/runconfigurationaspects.h>
 

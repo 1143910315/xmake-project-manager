@@ -25,7 +25,6 @@
 #include <utils/mimeutils.h>
 
 #include <qtsupport/qtcppkitinfo.h>
-#include <qtsupport/qtkitinformation.h>
 
 #include <QJsonDocument>
 #include <QStringList>
