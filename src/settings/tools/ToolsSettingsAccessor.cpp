@@ -41,7 +41,7 @@ namespace XMakeProjectManager::Internal {
     auto
         ToolsSettingsAccessor::saveXMakeTools(const std::vector<XMakeTools::XMakeWrapperPtr> &tools,
                                               QWidget *parent) -> void {
-        auto data = QVariantMap {};
+        auto data = Utils::Store {};
 
         auto entry_count = 0;
 
@@ -51,7 +51,7 @@ namespace XMakeProjectManager::Internal {
             ++entry_count;
         }
 
-        data.insert(QLatin1String { Constants::ToolsSettings::ENTRY_COUNT }, entry_count);
+        data.insert(Constants::ToolsSettings::ENTRY_COUNT, entry_count);
         saveSettings(data, parent);
     }
 

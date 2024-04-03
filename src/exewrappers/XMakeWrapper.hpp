@@ -117,8 +117,8 @@ namespace XMakeProjectManager::Internal {
         bool m_auto_accept_requests;
     };
 
-    QVariantMap toVariantMap(const XMakeWrapper &xmake);
-    XMakeWrapper *fromVariantMap(const QVariantMap &data);
+    Utils::Store toVariantMap(const XMakeWrapper &xmake);
+    XMakeWrapper *fromVariantMap(const Utils::Store &data);
 } // namespace XMakeProjectManager::Internal
 
 #include "XMakeWrapper.inl"
