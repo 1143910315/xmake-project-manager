@@ -13,6 +13,7 @@
 #include <project/XMakeBuildStep.hpp>
 #include <project/XMakeBuildSystem.hpp>
 
+#include <qtsupport/baseqtversion.h>
 #include <qtsupport/qtcppkitinfo.h>
 
 #include <projectexplorer/buildconfiguration.h>
@@ -38,7 +39,11 @@ namespace XMakeProjectManager::Internal {
                                               info.typeName);
 
             auto *kit     = target->kit();
-
+            auto kit_info = QtSupport::CppKitInfo { kit };
+            if (kit_info.qtVersion && !kit_info.qtVersion->prefix().isEmpty()) {
+                m_parameters +=
+                    QString { " --qt=\"%1\"" }.arg(kit_info.qtVersion->prefix().nativePath());
+            }
             if (info.buildDirectory.isEmpty())
                 setBuildDirectory(shadowBuildDirectory(target->project()->projectFilePath(),
                                                        kit,
@@ -107,8 +112,7 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     auto XMakeBuildConfiguration::toMap(Utils::Store &map) const -> void {
         ProjectExplorer::BuildConfiguration::toMap(map);
-        map[Constants::BuildConfiguration::BUILD_TYPE_KEY] =
-            xmakeBuildTypeName(m_build_type);
+        map[Constants::BuildConfiguration::BUILD_TYPE_KEY] = xmakeBuildTypeName(m_build_type);
         map[Constants::BuildConfiguration::PARAMETERS_KEY] = m_parameters;
     }
 
@@ -118,11 +122,9 @@ namespace XMakeProjectManager::Internal {
         ProjectExplorer::BuildConfiguration::fromMap(map);
 
         m_build_system = std::make_unique<XMakeBuildSystem>(this);
-        m_build_type   = xmakeBuildType(
-            map.value(Constants::BuildConfiguration::BUILD_TYPE_KEY)
-                .toString());
-        m_parameters = map.value(Constants::BuildConfiguration::PARAMETERS_KEY)
-                           .toString();
+        m_build_type =
+            xmakeBuildType(map.value(Constants::BuildConfiguration::BUILD_TYPE_KEY).toString());
+        m_parameters = map.value(Constants::BuildConfiguration::PARAMETERS_KEY).toString();
     }
 
     ////////////////////////////////////////////////////
