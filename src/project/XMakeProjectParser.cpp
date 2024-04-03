@@ -47,8 +47,8 @@ namespace XMakeProjectManager::Internal {
         std::transform(std::cbegin(path_list),
                     std::cend(path_list),
                     std::back_inserter(allAbs),
-                    [refPath](const QString &path) {
-                            return refPath.resolvePath(path).toString();
+                    [ref_path](const QString &path) {
+                            return ref_path.resolvePath(path).toString();
                     });
         return allAbs;
     }
