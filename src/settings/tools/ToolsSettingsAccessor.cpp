@@ -8,8 +8,6 @@
 
 #include <exewrappers/XMakeWrapper.hpp>
 
-#include <app/app_version.h>
-
 #include <coreplugin/icore.h>
 
 #include <utils/fileutils.h>
