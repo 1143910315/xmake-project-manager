@@ -16,7 +16,7 @@ namespace XMakeProjectManager::Internal {
         m_ui->setupUi(this);
 
         m_ui->xmake_path_chooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
-        m_ui->xmake_path_chooser->setHistoryCompleter(QStringLiteral("XMake.Command.History"));
+        m_ui->xmake_path_chooser->setHistoryCompleter("XMake.Command.History");
 
         connect(m_ui->xmake_path_chooser,
                 &Utils::PathChooser::rawPathChanged,
