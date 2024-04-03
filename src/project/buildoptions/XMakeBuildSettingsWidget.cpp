@@ -134,7 +134,7 @@ namespace XMakeProjectManager::Internal {
         m_parameters_line_edit->setPlaceholderText("XMake options");
 
         {
-            using namespace Utils::Layouting;
+            using namespace Layouting;
 
             Grid xmake_configuration { m_options_filter_line_edit,
                                        br,
