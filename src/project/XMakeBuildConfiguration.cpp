@@ -32,7 +32,7 @@ namespace XMakeProjectManager::Internal {
         setInitializer([this, target](const auto &info) {
             m_build_type = xmakeBuildType(info.typeName);
 
-            m_parameters = m_parameters +=
+            m_parameters =
                 QString { "-P %1 -m %2" }.arg(project()->rootProjectDirectory().nativePath(),
                                               info.typeName);
 
@@ -104,7 +104,7 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     auto XMakeBuildConfiguration::xmakeConfigArgs() -> QStringList {
-        return Utils::ProcessArgs::splitArgs(m_parameters);
+        return Utils::ProcessArgs::splitArgs(m_parameters, HostOsInfo::hostOs());
     }
 
     ////////////////////////////////////////////////////
