@@ -20,6 +20,7 @@
 
 #include <cppeditor/cppeditorconstants.h>
 
+#include <utils/async.h>
 #include <utils/fileinprojectfinder.h>
 #include <utils/filepath.h>
 #include <utils/mimeutils.h>
