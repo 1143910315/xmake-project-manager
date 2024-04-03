@@ -14,6 +14,7 @@
 
 #include <QCoreApplication>
 #include <QVariantMap>
+#include <QGuiApplication>
 
 namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
@@ -26,11 +27,11 @@ namespace XMakeProjectManager::Internal {
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    ToolsSettingsAccessor::ToolsSettingsAccessor()
-        : Utils::UpgradingSettingsAccessor(
-              "QtCreatorXMakeTools",
-              QCoreApplication::translate("XMakeProjectManager::XMakeToolManager", "XMake"),
-              Core::Constants::IDE_DISPLAY_NAME) {
+    ToolsSettingsAccessor::ToolsSettingsAccessor() {
+        setDocType("QtCreatorXMakeTools");
+        setApplicationDisplayName(QGuiApplication::applicationDisplayName());
+
+        addVersionUpgrader(std::make_unique<CMakeToolSettingsUpgraderV0>());
         setBaseFilePath(
             Core::ICore::userResourcePath(QLatin1String { Constants::ToolsSettings::FILENAME }));
     }
