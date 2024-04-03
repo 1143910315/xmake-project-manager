@@ -181,7 +181,7 @@ namespace XMakeProjectManager::Internal {
 
         node->addNestedNodes(std::move(nodes));
 
-        for (auto *n : node->folderNodes()) n->compress();
+        //for (auto *n : node->folderNodes()) n->compress();
     }
 
     ////////////////////////////////////////////////////
