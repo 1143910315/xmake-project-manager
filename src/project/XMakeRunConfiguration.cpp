@@ -7,7 +7,6 @@
 #include <XMakeProjectConstant.hpp>
 
 #include <qtsupport/qtcppkitinfo.h>
-#include <qtsupport/qtkitinformation.h>
 
 #include <projectexplorer/buildsystem.h>
 #include <projectexplorer/desktoprunconfiguration.h>
