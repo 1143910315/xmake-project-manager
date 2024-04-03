@@ -111,9 +111,9 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     auto XMakeBuildConfiguration::toMap(const Utils::Store &map) const -> void {
         ProjectExplorer::BuildConfiguration::toMap(map);
-        map[QString::fromLatin1(Constants::BuildConfiguration::BUILD_TYPE_KEY)] =
+        map[Constants::BuildConfiguration::BUILD_TYPE_KEY] =
             xmakeBuildTypeName(m_build_type);
-        map[QString::fromLatin1(Constants::BuildConfiguration::PARAMETERS_KEY)] = m_parameters;
+        map[Constants::BuildConfiguration::PARAMETERS_KEY] = m_parameters;
     }
 
     ////////////////////////////////////////////////////
@@ -123,9 +123,9 @@ namespace XMakeProjectManager::Internal {
 
         m_build_system = std::make_unique<XMakeBuildSystem>(this);
         m_build_type   = xmakeBuildType(
-            map.value(QString::fromLatin1(Constants::BuildConfiguration::BUILD_TYPE_KEY))
+            map.value(Constants::BuildConfiguration::BUILD_TYPE_KEY)
                 .toString());
-        m_parameters = map.value(QString::fromLatin1(Constants::BuildConfiguration::PARAMETERS_KEY))
+        m_parameters = map.value(Constants::BuildConfiguration::PARAMETERS_KEY)
                            .toString();
     }
 
