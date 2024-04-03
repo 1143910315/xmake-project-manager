@@ -324,7 +324,7 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     auto XMakeProjectParser::startParser(const QByteArray &data) -> bool {
         m_parser_future_result =
-            Utils::runAsync(ProjectExplorer::ProjectExplorerPlugin::sharedThreadPool(),
+            Utils::asyncRun(ProjectExplorer::ProjectExplorerPlugin::sharedThreadPool(),
                             [data, build_dir = m_build_dir.toString(), src_dir = m_src_dir] {
                                 return extractParserResults(src_dir, XMakeInfoParser::parse(data));
                             });
