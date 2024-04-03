@@ -441,9 +441,9 @@ namespace XMakeProjectManager::Internal {
 
         auto base_dir = Utils::FilePath::fromString(target.defined_in).absolutePath().toString();
         if (kit_info.cxxToolChain)
-            part.setFlagsForCxx({ kit_info.cxxToolChain, flags.arguments, base_dir });
+            part.setFlagsForCxx({ kit_info.cxxToolChain, flags.arguments, FilePath::fromString(base_dir) });
         if (kit_info.cToolChain)
-            part.setFlagsForC({ kit_info.cToolChain, flags.arguments, base_dir });
+            part.setFlagsForC({ kit_info.cToolChain, flags.arguments, FilePath::fromString(base_dir) });
 
         part.setBuildTargetType((target.kind == Target::Kind::BINARY)
                                     ? ProjectExplorer::BuildTargetType::Executable
