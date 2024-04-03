@@ -46,7 +46,7 @@ namespace XMakeProjectManager::Internal {
         auto entry_count = 0;
 
         for (const auto &tool : tools) {
-            data.insert(entryName(entry_count), toVariantMap(*tool));
+            data.insert(entryName(entry_count).utf8(), toVariantMap(*tool));
 
             ++entry_count;
         }
@@ -62,7 +62,7 @@ namespace XMakeProjectManager::Internal {
         const auto data = restoreSettings(parent);
 
         const auto entry_count =
-            data.value(QLatin1String { Constants::ToolsSettings::ENTRY_COUNT }, 0).toInt();
+            data.value(Constants::ToolsSettings::ENTRY_COUNT, 0).toInt();
 
         auto result = std::vector<XMakeTools::XMakeWrapperPtr> {};
         result.reserve(entry_count);
@@ -73,7 +73,7 @@ namespace XMakeProjectManager::Internal {
             if (data.contains(name.uft8())) {
                 const auto map = data[name].toMap();
                 const auto type =
-                    map.value(QLatin1String { Constants::ToolsSettings::TOOL_TYPE_KEY },
+                    map.value(Constants::ToolsSettings::TOOL_TYPE_KEY,
                               Constants::ToolsSettings::TOOL_TYPE_XMAKE); // TODO xrepo
 
                 if (type == Constants::ToolsSettings::TOOL_TYPE_XMAKE)
