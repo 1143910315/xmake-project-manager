@@ -13,6 +13,32 @@
 #include <utils/qtcassert.h>
 
 namespace XMakeProjectManager::Internal {
+
+    template<typename T>
+    inline bool is(const MesonTools::Tool_t &tool) {
+        return bool(std::dynamic_pointer_cast<T>(tool));
+    }
+
+    template<typename T>
+    std::shared_ptr<T> tool(const Utils::Id &id, const std::vector<MesonTools::Tool_t> &tools) {
+        static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
+        const auto tool =
+            std::find_if(std::cbegin(tools),
+                         std::cend(tools),
+                         [&id](const MesonTools::Tool_t &tool) { return tool->id() == id; });
+        if (tool != std::cend(tools) && is<T>(*tool)) return std::dynamic_pointer_cast<T>(*tool);
+        return nullptr;
+    }
+
+    template<typename T>
+    std::shared_ptr<T> autoDetected(const std::vector<MesonTools::Tool_t> &tools) {
+        static_assert(std::is_base_of<ToolWrapper, T>::value, "Type must derive from ToolWrapper");
+        for (const auto &tool : tools) {
+            if (tool->autoDetected() && is<T>(tool)) { return std::dynamic_pointer_cast<T>(tool); }
+        }
+        return nullptr;
+    }
+
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     XMakeTools::XMakeTools() = default;
@@ -90,36 +116,20 @@ namespace XMakeProjectManager::Internal {
 
         auto item = Utils::take(self.m_tools, [&id](const auto &tool) { return tool->id() == id; });
 
-        QTC_ASSERT(item, return );
+        QTC_ASSERT(item, return);
 
         Q_EMIT self.toolRemoved(*item->get());
     }
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeTools::xmakeWrapper() -> XMakeWrapper * {
-        auto &self = instance();
-
-        auto item = std::find_if(std::begin(self.m_tools),
-                                 std::end(self.m_tools),
-                                 [](const auto &tool) { return tool->autoDetected(); });
-
-        if (item == std::cend(self.m_tools)) return nullptr;
-
-        return item->get();
+    auto XMakeTools::xmakeWrapper() -> std::shared_ptr<XMakeWrapper> {
+        return autoDetected<MesonWrapper>(instance()->m_tools);
     }
 
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
-    auto XMakeTools::xmakeWrapper(Utils::Id id) -> XMakeWrapper * {
-        auto &self = instance();
-
-        auto item = std::find_if(std::begin(self.m_tools),
-                                 std::end(self.m_tools),
-                                 [&id](const auto &tool) { return tool->id() == id; });
-
-        if (item == std::cend(self.m_tools)) return nullptr;
-
-        return item->get();
+    auto XMakeTools::xmakeWrapper(Utils::Id id) -> std::shared_ptr<XMakeWrapper> {
+        return tool<MesonWrapper>(id, instance()->m_tools);
     }
 } // namespace XMakeProjectManager::Internal

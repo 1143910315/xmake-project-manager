@@ -13,81 +13,75 @@
 #include <projectexplorer/kitmanager.h>
 #include <projectexplorer/task.h>
 
+using namespace ProjectExplorer;
+
 namespace XMakeProjectManager::Internal {
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    XMakeToolKitAspect::XMakeToolKitAspect() {
+
+void XMakeToolKitAspect::setXMakeTool(Kit *kit, Utils::Id id)
+{
+    QTC_ASSERT(kit && id.isValid(), return );
+    kit->setValue(Constants::TOOL_ID, id.toSetting());
+}
+
+Utils::Id XMakeToolKitAspect::xmakeToolId(const Kit *kit)
+{
+    QTC_ASSERT(kit, return {});
+    return Utils::Id::fromSetting(kit->value(Constants::TOOL_ID));
+}
+
+// XMakeToolKitAspectFactory
+
+class XMakeToolKitAspectFactory final : public KitAspectFactory
+{
+public:
+    XMakeToolKitAspectFactory()
+    {
         setObjectName(QLatin1String("XMakeKitAspect"));
         setId(Constants::TOOL_ID);
-        setDisplayName(tr("XMake Tool"));
-        setDescription(tr("The XMake tool to use when building a project with XMake.<br>"
-                          "This setting is ignored when using other build systems."));
+        setDisplayName(Tr::tr("XMake Tool"));
+        setDescription(Tr::tr("The XMake tool to use when building a project with XMake.<br>"
+                              "This setting is ignored when using other build systems."));
         setPriority(9000);
     }
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::validate(const ProjectExplorer::Kit *kit) const
-        -> ProjectExplorer::Tasks {
-        auto tasks = ProjectExplorer::Tasks {};
-
-        const auto tool = xmakeTool(kit);
-
+    Tasks validate(const Kit *k) const final
+    {
+        Tasks tasks;
+        const auto tool = XMakeToolKitAspect::xmakeTool(k);
         if (tool && !tool->isValid())
-            tasks << ProjectExplorer::BuildSystemTask(ProjectExplorer::Task::Warning,
-                                                      tr("Cannot validate this meson executable."));
-
+            tasks << BuildSystemTask{Task::Warning, Tr::tr("Cannot validate this xmake executable.")};
         return tasks;
     }
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::setup(ProjectExplorer::Kit *kit) -> void {
-        const auto tool = xmakeTool(kit);
-
+    void setup(Kit *k) final
+    {
+        const auto tool = XMakeToolKitAspect::xmakeTool(k);
         if (!tool) {
-            const auto auto_detected = XMakeTools::xmakeWrapper();
-
-            if (auto_detected) setXMakeTool(kit, auto_detected->id());
+            const auto autoDetected = XMakeTools::xmakeWrapper();
+            if (autoDetected)
+                XMakeToolKitAspect::setXMakeTool(k, autoDetected->id());
         }
     }
-
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::fix(ProjectExplorer::Kit *kit) -> void { setup(kit); }
-
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::toUserOutput(const ProjectExplorer::Kit *kit) const -> ItemList {
-        const auto tool = xmakeTool(kit);
-
-        if (tool) return { { tr("XMake"), tool->name() } };
-
-        return { { tr("XMake"), tr("Unconfigured") } };
+    void fix(Kit *k) final
+    {
+        setup(k);
     }
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::createConfigWidget(ProjectExplorer::Kit *kit) const
-        -> ProjectExplorer::KitAspectWidget * {
-        QTC_ASSERT(kit, return nullptr);
-
-        return new ToolKitAspectWidget { kit, this, ToolKitAspectWidget::ToolType::XMake };
+    KitAspect *createKitAspect(Kit *k) const
+    {
+        return new ToolKitAspectWidget{k, this, ToolKitAspectWidget::ToolType::XMake};
     }
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::setXMakeTool(ProjectExplorer::Kit *kit, const Utils::Id &id) -> void {
-        QTC_ASSERT(kit && id.isValid(), return );
-
-        kit->setValue(Constants::TOOL_ID, id.toSetting());
+    ItemList toUserOutput( const Kit *k) const
+    {
+        const auto tool = XMakeToolKitAspect::xmakeTool(k);
+        if (tool)
+            return {{Tr::tr("XMake"), tool->name()}};
+        return {{Tr::tr("XMake"), Tr::tr("Unconfigured")}};
     }
+};
 
-    ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////
-    auto XMakeToolKitAspect::xmakeToolId(const ProjectExplorer::Kit *kit) -> Utils::Id {
-        QTC_ASSERT(kit, return {});
+const XMakeToolKitAspectFactory theXMakeKitAspectFactory;
 
-        return Utils::Id::fromSetting(kit->value(Constants::TOOL_ID));
-    }
+
 } // namespace XMakeProjectManager::Internal

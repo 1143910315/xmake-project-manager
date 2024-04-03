@@ -12,28 +12,23 @@
 #include <projectexplorer/kit.h>
 #include <projectexplorer/kitmanager.h>
 
-namespace XMakeProjectManager::Internal {
-    class XMakeToolKitAspect final: public ProjectExplorer::KitAspect {
-        Q_DECLARE_TR_FUNCTIONS(XMakeProjectMnager::Internal::XMakeToolKitAspect)
-
-      public:
-        XMakeToolKitAspect();
-
-        ProjectExplorer::Tasks validate(const ProjectExplorer::Kit *kit) const override;
-
-        void setup(ProjectExplorer::Kit *kit) override;
-        void fix(ProjectExplorer::Kit *kit) override;
-
-        ItemList toUserOutput(const ProjectExplorer::Kit *kit) const override;
-
-        ProjectExplorer::KitAspectWidget *
-            createConfigWidget(ProjectExplorer::Kit *kit) const override;
-
-        static void setXMakeTool(ProjectExplorer::Kit *kit, const Utils::Id &id);
+namespace XMakeProjectManager::Internal {    
+    class XMakeToolKitAspect final
+    {
+    public:
+        static void setXMakeTool(ProjectExplorer::Kit *kit, Utils::Id id);
         static Utils::Id xmakeToolId(const ProjectExplorer::Kit *kit);
 
-        static decltype(auto) xmakeTool(const ProjectExplorer::Kit *kit);
-        static bool isValid(const ProjectExplorer::Kit *kit);
+        static inline decltype(auto) xmakeTool(const ProjectExplorer::Kit *kit)
+        {
+            return XMakeTools::xmakeWrapper(XMakeToolKitAspect::xmakeToolId(kit));
+        }
+
+        static inline bool isValid(const ProjectExplorer::Kit *kit)
+        {
+            auto tool = xmakeToolId(kit);
+            return (tool && tool->isValid());
+        }
     };
 } // namespace XMakeProjectManager::Internal
 

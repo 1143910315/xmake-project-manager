@@ -65,7 +65,7 @@ namespace XMakeProjectManager::Internal {
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
     inline auto runXMake(const Command &command, QIODevice *output) -> bool {
-        auto process = Utils::QtcProcess {};
+        auto process = Utils::Process {};
         process.setWorkingDirectory(command.workDir());
         process.setCommand(command.cmdLine());
         process.start();

@@ -39,8 +39,8 @@ namespace XMakeProjectManager::Internal {
 
         static const std::vector<XMakeWrapperPtr> &tools() noexcept;
 
-        static XMakeWrapper *xmakeWrapper();
-        static XMakeWrapper *xmakeWrapper(Utils::Id id);
+        static std::shared_ptr<XMakeWrapper> xmakeWrapper();
+        static std::shared_ptr<XMakeWrapper> xmakeWrapper(Utils::Id id);
 
         static XMakeTools &instance();
       Q_SIGNALS:

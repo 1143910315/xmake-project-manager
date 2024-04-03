@@ -9,7 +9,6 @@
 #include <settings/general/Settings.hpp>
 
 #include <coreplugin/icore.h>
-#include <utils/qtcprocess.h>
 
 #include <QCryptographicHash>
 #include <QFile>
